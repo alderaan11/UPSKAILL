@@ -13,27 +13,27 @@ export interface ArxivPaper {
 
 const TOPICS = [
   {
-    query: "ti:%22key+information+extraction%22+OR+ti:%22document+understanding%22",
+    query: "abs:%22key+information+extraction%22+OR+abs:%22document+understanding%22+OR+abs:%22information+extraction%22",
     topic: "Key Information Extraction",
     color: "yellow",
   },
   {
-    query: "ti:%22fraud+detection%22+OR+ti:%22anomaly+detection%22+AND+cat:cs.LG",
+    query: "abs:%22fraud+detection%22+OR+abs:%22anomaly+detection%22",
     topic: "Fraud Detection",
     color: "red",
   },
   {
-    query: "ti:%22large+language+model%22+OR+ti:%22language+model%22+AND+cat:cs.CL",
+    query: "abs:%22large+language+model%22+AND+cat:cs.CL",
     topic: "LLMs",
     color: "blue",
   },
   {
-    query: "ti:%22vision+language+model%22+OR+ti:%22multimodal%22+AND+cat:cs.CV",
+    query: "abs:%22vision+language+model%22+OR+abs:%22multimodal+model%22+AND+cat:cs.CV",
     topic: "VLMs",
     color: "purple",
   },
   {
-    query: "ti:%22medical%22+OR+ti:%22clinical%22+AND+cat:cs.AI",
+    query: "abs:%22medical+imaging%22+OR+abs:%22clinical+nlp%22+OR+abs:%22medical+AI%22",
     topic: "Medical AI",
     color: "green",
   },
