@@ -20,10 +20,11 @@ export async function POST(req: NextRequest) {
   }
 
   const { topic, mode, question, answer } = await req.json();
-  const topicDesc = TOPIC_PROMPTS[topic];
-  if (!topicDesc) {
-    return new Response(JSON.stringify({ error: "Unknown topic" }), { status: 400 });
+  if (!topic || typeof topic !== "string" || !topic.trim()) {
+    return new Response(JSON.stringify({ error: "Topic is required" }), { status: 400 });
   }
+  // Use predefined description if available, otherwise use the topic name directly
+  const topicDesc = TOPIC_PROMPTS[topic] ?? topic;
 
   let prompt: string;
 

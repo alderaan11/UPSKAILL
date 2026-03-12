@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const TOPICS = [
+const DEFAULT_TOPICS = [
   "Machine Learning",
   "Data Science",
   "Probability & Statistics",
@@ -10,7 +10,7 @@ const TOPICS = [
   "Cloud",
 ];
 
-const TOPIC_ACTIVE: Record<string, string> = {
+const PRESET_ACTIVE: Record<string, string> = {
   "Machine Learning": "bg-blue-600 border-blue-600 text-white",
   "Data Science": "bg-purple-600 border-purple-600 text-white",
   "Probability & Statistics": "bg-amber-500 border-amber-500 text-white",
@@ -21,6 +21,7 @@ const TOPIC_ACTIVE: Record<string, string> = {
 type Phase = "pick" | "question" | "answer" | "feedback";
 
 export default function QuestionPage() {
+  const [topics, setTopics] = useState<string[]>(DEFAULT_TOPICS);
   const [topic, setTopic] = useState<string | null>(null);
   const [phase, setPhase] = useState<Phase>("pick");
   const [question, setQuestion] = useState("");
@@ -28,6 +29,30 @@ export default function QuestionPage() {
   const [feedback, setFeedback] = useState("");
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState("");
+  const [newTopic, setNewTopic] = useState("");
+
+  function addTopic() {
+    const t = newTopic.trim();
+    if (!t || topics.includes(t)) return;
+    setTopics((prev) => [...prev, t]);
+    setNewTopic("");
+    selectTopic(t);
+  }
+
+  function removeTopic(t: string) {
+    if (DEFAULT_TOPICS.includes(t)) return; // can't remove defaults
+    setTopics((prev) => prev.filter((x) => x !== t));
+    if (topic === t) reset();
+  }
+
+  function selectTopic(t: string) {
+    setTopic(t);
+    setPhase("pick");
+    setQuestion("");
+    setAnswer("");
+    setFeedback("");
+    setError("");
+  }
 
   async function streamResponse(body: object, onChunk: (text: string) => void) {
     setStreaming(true);
@@ -102,6 +127,8 @@ export default function QuestionPage() {
     setError("");
   }
 
+  const isCustom = (t: string) => !DEFAULT_TOPICS.includes(t);
+
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-8">
@@ -115,23 +142,58 @@ export default function QuestionPage() {
       <div className="mb-6">
         <p className="mb-3 text-sm font-medium text-gray-700">Choose a topic</p>
         <div className="flex flex-wrap gap-2">
-          {TOPICS.map((t) => {
+          {topics.map((t) => {
             const active = topic === t;
+            const activeClass = PRESET_ACTIVE[t] ?? "bg-indigo-600 border-indigo-600 text-white";
             return (
-              <button
-                key={t}
-                onClick={() => { setTopic(t); setPhase("pick"); setQuestion(""); setAnswer(""); setFeedback(""); setError(""); }}
-                className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
-                  active
-                    ? TOPIC_ACTIVE[t]
-                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900 shadow-sm"
-                }`}
-              >
-                {t}
-              </button>
+              <div key={t} className="group relative">
+                <button
+                  onClick={() => selectTopic(t)}
+                  className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                    active
+                      ? activeClass
+                      : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900 shadow-sm"
+                  } ${isCustom(t) ? "pr-8" : ""}`}
+                >
+                  {t}
+                </button>
+                {isCustom(t) && (
+                  <button
+                    onClick={() => removeTopic(t)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-700 leading-none"
+                    title="Remove topic"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             );
           })}
         </div>
+      </div>
+
+      {/* Add custom topic */}
+      <div className="mb-6">
+        <p className="mb-2 text-sm font-medium text-gray-700">Add a topic</p>
+        <form
+          onSubmit={(e) => { e.preventDefault(); addTopic(); }}
+          className="flex gap-2"
+        >
+          <input
+            type="text"
+            value={newTopic}
+            onChange={(e) => setNewTopic(e.target.value)}
+            placeholder="e.g. Deep Learning, SQL, Docker…"
+            className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm outline-none focus:border-gray-400"
+          />
+          <button
+            type="submit"
+            disabled={!newTopic.trim()}
+            className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-900 disabled:opacity-40"
+          >
+            Add
+          </button>
+        </form>
       </div>
 
       {/* Generate button */}
