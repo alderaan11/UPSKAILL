@@ -48,7 +48,6 @@ export default function ChallengePage() {
       const decoder = new TextDecoder();
       let assistantContent = "";
 
-      // Add empty assistant message to fill in
       setMessages((prev) => [...prev, { role: "assistant", content: "" }]);
 
       while (true) {
@@ -83,10 +82,7 @@ export default function ChallengePage() {
       console.error(error);
       setMessages((prev) => [
         ...prev,
-        {
-          role: "assistant",
-          content: `Error: ${msg}`,
-        },
+        { role: "assistant", content: `Error: ${msg}` },
       ]);
     } finally {
       setStreaming(false);
@@ -96,26 +92,24 @@ export default function ChallengePage() {
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold">Daily AI Challenge</h1>
-        <p className="text-sm text-zinc-400">
+        <h1 className="text-2xl font-bold text-gray-900">Daily AI Challenge</h1>
+        <p className="text-sm text-gray-500">
           Get a problem. Propose your AI solution. Get roasted. Improve.
         </p>
       </div>
 
       {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-900 p-4">
+      <div className="flex-1 overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 p-4">
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-            <div className="text-4xl">⚡</div>
-            <p className="text-zinc-400">
-              Type <strong>&quot;new challenge&quot;</strong> to get your daily AI problem.
+            <p className="text-gray-500 max-w-sm">
+              Type <strong className="text-gray-900">&quot;new challenge&quot;</strong> to get your daily AI problem.
               <br />
-              Then propose your solution and the coach will aggressively critique
-              it.
+              Then propose your solution and the coach will aggressively critique it.
             </p>
             <button
               onClick={() => sendMessage("new challenge")}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500"
+              className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
             >
               Start a Challenge
             </button>
@@ -128,16 +122,16 @@ export default function ChallengePage() {
             className={`mb-4 ${msg.role === "user" ? "text-right" : ""}`}
           >
             <div
-              className={`inline-block max-w-[80%] rounded-xl px-4 py-2 text-sm ${
+              className={`inline-block max-w-[80%] rounded-xl px-4 py-2.5 text-sm ${
                 msg.role === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-zinc-800 text-zinc-200"
+                  ? "bg-gray-900 text-white"
+                  : "bg-white border border-gray-200 text-gray-800 shadow-sm"
               }`}
             >
               <pre className="whitespace-pre-wrap font-sans">
                 {msg.content}
                 {streaming && i === messages.length - 1 && msg.role === "assistant" && (
-                  <span className="animate-pulse">▊</span>
+                  <span className="animate-pulse text-gray-400">|</span>
                 )}
               </pre>
             </div>
@@ -152,20 +146,20 @@ export default function ChallengePage() {
           e.preventDefault();
           sendMessage(input);
         }}
-        className="mt-4 flex gap-2"
+        className="mt-3 flex gap-2"
       >
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Describe your AI solution..."
-          className="flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-3 text-sm text-white placeholder-zinc-500 focus:border-blue-500 focus:outline-none"
+          className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-400 focus:outline-none shadow-sm"
           disabled={streaming}
         />
         <button
           type="submit"
           disabled={streaming || !input.trim()}
-          className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-500 disabled:opacity-50"
+          className="rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-40 transition-colors"
         >
           Send
         </button>

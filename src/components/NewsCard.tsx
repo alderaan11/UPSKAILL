@@ -9,6 +9,17 @@ interface NewsCardProps {
   imageUrl?: string | null;
 }
 
+// Map source keywords to a top accent color
+function accentColor(source: string): string {
+  const s = source.toLowerCase();
+  if (s.includes("reddit")) return "bg-orange-500";
+  if (s.includes("arxiv")) return "bg-amber-500";
+  if (s.includes("polymarket")) return "bg-violet-500";
+  if (s.includes("twitter") || s.includes("x.com") || s.includes("@")) return "bg-sky-500";
+  if (s.includes("hugging") || s.includes("hf")) return "bg-yellow-500";
+  return "bg-indigo-500";
+}
+
 export default function NewsCard({
   title,
   snippet,
@@ -26,31 +37,35 @@ export default function NewsCard({
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-all hover:border-blue-600 hover:bg-zinc-800/50"
+      className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
     >
-      {imageUrl && (
+      {imageUrl ? (
         <img
           src={imageUrl}
           alt=""
-          className="mb-3 h-40 w-full rounded-lg object-cover"
+          className="h-40 w-full object-cover"
         />
+      ) : (
+        <div className={`h-1 w-full ${accentColor(source)}`} />
       )}
-      <div className="mb-2 flex items-center gap-2">
-        <span className="rounded-full bg-blue-600/20 px-2 py-0.5 text-xs font-medium text-blue-400">
-          {source}
-        </span>
-        {timeAgo && (
-          <span className="text-xs text-zinc-500">{timeAgo}</span>
+      <div className="flex flex-1 flex-col p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+            {source}
+          </span>
+          {timeAgo && (
+            <span className="text-xs text-gray-400">{timeAgo}</span>
+          )}
+        </div>
+        <h3 className="mb-1 text-sm font-semibold text-gray-900 group-hover:text-indigo-600 leading-snug">
+          {title}
+        </h3>
+        {snippet && (
+          <p className="text-xs leading-relaxed text-gray-500 line-clamp-2">
+            {snippet}
+          </p>
         )}
       </div>
-      <h3 className="mb-1 text-sm font-semibold text-white group-hover:text-blue-400">
-        {title}
-      </h3>
-      {snippet && (
-        <p className="text-xs leading-relaxed text-zinc-400 line-clamp-2">
-          {snippet}
-        </p>
-      )}
     </a>
   );
 }

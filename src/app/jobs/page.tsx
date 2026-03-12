@@ -28,12 +28,10 @@ const CITIES = [
 export default function JobsPage() {
   const [tab, setTab] = useState<"offres" | "entreprises">("offres");
 
-  // Offres d'emploi state
   const [jobs, setJobs] = useState<Job[]>([]);
   const [jobsLoading, setJobsLoading] = useState(true);
   const [sourceFilter, setSourceFilter] = useState<string>("all");
 
-  // La Bonne Boite state
   const [companies, setCompanies] = useState<LBBCompany[]>([]);
   const [lbbLoading, setLbbLoading] = useState(false);
   const [lbbFetched, setLbbFetched] = useState(false);
@@ -77,18 +75,18 @@ export default function JobsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">AI Job Board</h1>
-        <p className="text-sm text-zinc-400">
+        <h1 className="text-2xl font-bold text-gray-900">AI Job Board</h1>
+        <p className="text-sm text-gray-500">
           Offres AI/ML en France + entreprises qui recrutent
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-1 rounded-xl border border-zinc-800 bg-zinc-900 p-1 w-fit">
+      <div className="mb-6 flex gap-1 rounded-xl border border-gray-200 bg-gray-100 p-1 w-fit">
         <button
           onClick={() => setTab("offres")}
           className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
-            tab === "offres" ? "bg-green-600 text-white" : "text-zinc-400 hover:text-white"
+            tab === "offres" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
           }`}
         >
           Offres d&apos;emploi
@@ -96,31 +94,31 @@ export default function JobsPage() {
         <button
           onClick={() => setTab("entreprises")}
           className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
-            tab === "entreprises" ? "bg-green-600 text-white" : "text-zinc-400 hover:text-white"
+            tab === "entreprises" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
           }`}
         >
           Entreprises qui recrutent
         </button>
       </div>
 
-      {/* ── Offres d'emploi ── */}
+      {/* Offres d'emploi */}
       {tab === "offres" && (
         <>
           {jobsLoading ? (
             <div className="flex h-[60vh] items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-green-500 border-t-transparent" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
             </div>
           ) : (
             <>
-              <div className="mb-6 flex flex-wrap gap-2">
+              <div className="mb-6 flex flex-wrap gap-1.5">
                 {sources.map((s) => (
                   <button
                     key={s}
                     onClick={() => setSourceFilter(s)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                       sourceFilter === s
-                        ? "bg-green-600 text-white"
-                        : "bg-zinc-800 text-zinc-400 hover:text-white"
+                        ? "bg-gray-900 text-white"
+                        : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                     }`}
                   >
                     {s}
@@ -129,8 +127,8 @@ export default function JobsPage() {
               </div>
 
               {filteredJobs.length === 0 ? (
-                <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-8 text-center">
-                  <p className="text-zinc-400">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
+                  <p className="text-gray-500">
                     Aucune offre trouvée. Ajoutez vos clés API dans .env.local.
                   </p>
                 </div>
@@ -146,23 +144,23 @@ export default function JobsPage() {
         </>
       )}
 
-      {/* ── Entreprises qui recrutent (La Bonne Boite) ── */}
+      {/* Entreprises qui recrutent */}
       {tab === "entreprises" && (
         <>
           <div className="mb-4">
-            <p className="mb-3 text-sm text-zinc-400">
+            <p className="mb-3 text-sm text-gray-500">
               Entreprises ayant le plus de chances de recruter dans les 6 prochains mois
               pour des profils data / IA — données France Travail.
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {CITIES.map((city) => (
                 <button
                   key={city.label}
                   onClick={() => setSelectedCity(city)}
                   className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                     selectedCity.label === city.label
-                      ? "bg-green-600 text-white"
-                      : "bg-zinc-800 text-zinc-400 hover:text-white"
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                   }`}
                 >
                   {city.label}
@@ -173,14 +171,14 @@ export default function JobsPage() {
 
           {lbbLoading ? (
             <div className="flex h-[40vh] items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-green-500 border-t-transparent" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
             </div>
           ) : lbbFetched && companies.length === 0 ? (
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-8 text-center">
-              <p className="text-zinc-400">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
+              <p className="text-gray-500">
                 Aucune entreprise trouvée. Vérifiez que{" "}
-                <code className="text-zinc-300">FRANCE_TRAVAIL_CLIENT_ID</code> et{" "}
-                <code className="text-zinc-300">FRANCE_TRAVAIL_CLIENT_SECRET</code> sont
+                <code className="text-gray-700">FRANCE_TRAVAIL_CLIENT_ID</code> et{" "}
+                <code className="text-gray-700">FRANCE_TRAVAIL_CLIENT_SECRET</code> sont
                 configurés.
               </p>
             </div>

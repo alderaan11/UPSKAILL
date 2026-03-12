@@ -20,9 +20,9 @@ interface PackageRelease {
 }
 
 const PACKAGE_COLORS: Record<string, string> = {
-  "vLLM": "bg-cyan-900/40 text-cyan-300 border-cyan-700",
-  "Unsloth": "bg-orange-900/40 text-orange-300 border-orange-700",
-  "Transformers": "bg-yellow-900/40 text-yellow-300 border-yellow-700",
+  "vLLM": "bg-cyan-50 text-cyan-700 border-cyan-200",
+  "Unsloth": "bg-orange-50 text-orange-700 border-orange-200",
+  "Transformers": "bg-yellow-50 text-yellow-700 border-yellow-200",
 };
 
 interface ArxivPaper {
@@ -43,11 +43,11 @@ const TOPIC_COLORS: Record<string, string> = {
 };
 
 const BADGE_CLASSES: Record<string, string> = {
-  yellow: "bg-yellow-900/40 text-yellow-300 border-yellow-700",
-  red: "bg-red-900/40 text-red-300 border-red-700",
-  blue: "bg-blue-900/40 text-blue-300 border-blue-700",
-  purple: "bg-purple-900/40 text-purple-300 border-purple-700",
-  green: "bg-green-900/40 text-green-300 border-green-700",
+  yellow: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  red: "bg-red-50 text-red-700 border-red-200",
+  blue: "bg-blue-50 text-blue-700 border-blue-200",
+  purple: "bg-purple-50 text-purple-700 border-purple-200",
+  green: "bg-green-50 text-green-700 border-green-200",
 };
 
 const TOPICS = ["Key Information Extraction", "Fraud Detection", "LLMs", "VLMs", "Medical AI"];
@@ -109,20 +109,20 @@ export default function ModelsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">AI Model Updates</h1>
-        <p className="text-sm text-zinc-400">
+        <h1 className="text-2xl font-bold text-gray-900">AI Model Updates</h1>
+        <p className="text-sm text-gray-500">
           Latest releases, benchmarks, and research papers
         </p>
       </div>
 
       {/* Model news */}
       {loadingNews ? (
-        <div className="mb-10 flex justify-center">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+        <div className="mb-10 flex justify-center py-8">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
         </div>
       ) : modelItems.length > 0 && (
         <div className="mb-10">
-          <h2 className="mb-3 text-lg font-semibold text-blue-400">Model News</h2>
+          <h2 className="mb-4 text-base font-semibold text-gray-900">Model News</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {modelItems.map((item) => (
               <NewsCard
@@ -140,17 +140,15 @@ export default function ModelsPage() {
 
       {/* PyPI Package Releases */}
       <div className="mb-10">
-        <h2 className="mb-3 text-lg font-semibold text-cyan-400">
-          Library Releases
-          <span className="ml-2 text-xs font-normal text-zinc-500">vLLM · Unsloth · Transformers</span>
-        </h2>
+        <h2 className="mb-1 text-base font-semibold text-gray-900">Library Releases</h2>
+        <p className="mb-4 text-xs text-gray-400">vLLM · Unsloth · Transformers</p>
         {loadingReleases ? (
           <div className="flex justify-center py-6">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
           </div>
         ) : releases.length === 0 ? (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 text-center">
-            <p className="text-zinc-400">No releases found.</p>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 text-center">
+            <p className="text-gray-500">No releases found.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -160,19 +158,22 @@ export default function ModelsPage() {
                 href={r.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-colors hover:border-zinc-600"
+                className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
               >
-                <div className="mb-2 flex items-center gap-2">
-                  <span className={`rounded border px-2 py-0.5 text-xs font-semibold ${PACKAGE_COLORS[r.package] ?? "bg-zinc-800 text-zinc-300 border-zinc-600"}`}>
-                    {r.package}
-                  </span>
-                  <span className="font-mono text-sm font-medium text-white">{r.version}</span>
-                </div>
-                {r.notes && (
-                  <p className="mb-3 line-clamp-3 flex-1 text-xs text-zinc-400">{r.notes}</p>
-                )}
-                <div className="mt-auto text-xs text-zinc-500">
-                  {r.pubDate ? new Date(r.pubDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
+                <div className={`h-1 w-full ${r.package === "vLLM" ? "bg-cyan-500" : r.package === "Unsloth" ? "bg-orange-500" : "bg-yellow-500"}`} />
+                <div className="flex flex-1 flex-col p-4">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className={`rounded border px-2 py-0.5 text-xs font-semibold ${PACKAGE_COLORS[r.package] ?? "bg-gray-100 text-gray-700 border-gray-200"}`}>
+                      {r.package}
+                    </span>
+                    <span className="font-mono text-sm font-medium text-gray-900">{r.version}</span>
+                  </div>
+                  {r.notes && (
+                    <p className="mb-3 line-clamp-3 flex-1 text-xs text-gray-500">{r.notes}</p>
+                  )}
+                  <div className="mt-auto text-xs text-gray-400">
+                    {r.pubDate ? new Date(r.pubDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
+                  </div>
                 </div>
               </a>
             ))}
@@ -182,19 +183,17 @@ export default function ModelsPage() {
 
       {/* arXiv Research Papers */}
       <div>
-        <h2 className="mb-3 text-lg font-semibold text-orange-400">
-          Research Papers
-          <span className="ml-2 text-xs font-normal text-zinc-500">via arXiv</span>
-        </h2>
+        <h2 className="mb-1 text-base font-semibold text-gray-900">Research Papers</h2>
+        <p className="mb-4 text-xs text-gray-400">via arXiv</p>
 
         {/* Topic filter */}
-        <div className="mb-4 flex flex-wrap gap-2">
+        <div className="mb-4 flex flex-wrap gap-1.5">
           <button
             onClick={() => setActiveTopic("all")}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               activeTopic === "all"
-                ? "bg-zinc-600 text-white"
-                : "bg-zinc-800 text-zinc-400 hover:text-white"
+                ? "bg-gray-900 text-white"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
             }`}
           >
             All
@@ -209,7 +208,7 @@ export default function ModelsPage() {
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                   isActive
                     ? BADGE_CLASSES[color]
-                    : "border-zinc-700 bg-zinc-800 text-zinc-400 hover:text-white"
+                    : "border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-900"
                 }`}
               >
                 {topic}
@@ -220,11 +219,11 @@ export default function ModelsPage() {
 
         {loadingPapers ? (
           <div className="flex justify-center py-8">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-orange-500 border-t-transparent" />
+            <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
           </div>
         ) : filteredPapers.length === 0 ? (
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-8 text-center">
-            <p className="text-zinc-400">No papers found for this topic.</p>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
+            <p className="text-gray-500">No papers found for this topic.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -236,30 +235,33 @@ export default function ModelsPage() {
                   href={paper.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-colors hover:border-zinc-600"
+                  className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
                 >
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className={`rounded border px-2 py-0.5 text-xs font-medium ${BADGE_CLASSES[color]}`}>
-                      {paper.topic}
-                    </span>
-                  </div>
-                  <p className="mb-2 line-clamp-3 text-sm font-medium leading-snug text-white group-hover:text-zinc-200">
-                    {paper.title}
-                  </p>
-                  <p className="mb-3 line-clamp-3 flex-1 text-xs text-zinc-400">
-                    {paper.snippet}
-                  </p>
-                  <div className="mt-auto flex items-center justify-between text-xs text-zinc-500">
-                    <span>arXiv</span>
-                    <span>
-                      {paper.pubDate
-                        ? new Date(paper.pubDate).toLocaleDateString("en-GB", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })
-                        : ""}
-                    </span>
+                  <div className={`h-1 w-full ${color === "yellow" ? "bg-yellow-500" : color === "red" ? "bg-red-500" : color === "blue" ? "bg-blue-500" : color === "purple" ? "bg-purple-500" : "bg-green-500"}`} />
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="mb-2">
+                      <span className={`rounded border px-2 py-0.5 text-xs font-medium ${BADGE_CLASSES[color]}`}>
+                        {paper.topic}
+                      </span>
+                    </div>
+                    <p className="mb-2 line-clamp-3 text-sm font-semibold leading-snug text-gray-900 group-hover:text-indigo-600">
+                      {paper.title}
+                    </p>
+                    <p className="mb-3 line-clamp-3 flex-1 text-xs text-gray-500">
+                      {paper.snippet}
+                    </p>
+                    <div className="mt-auto flex items-center justify-between text-xs text-gray-400">
+                      <span>arXiv</span>
+                      <span>
+                        {paper.pubDate
+                          ? new Date(paper.pubDate).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })
+                          : ""}
+                      </span>
+                    </div>
                   </div>
                 </a>
               );

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Pulse — Real-time AI News, Models & Jobs",
+  title: "UPSKAILL — AI News, Models & Jobs",
   description:
     "Stay on top of AI: real-time news, model updates, daily challenges, and job listings.",
 };
@@ -25,9 +25,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
       >
         <Navbar />
         <main className="mx-auto max-w-6xl px-4 pt-20 pb-12">{children}</main>

@@ -23,34 +23,39 @@ export default function JobCard({
     ? formatDistanceToNow(new Date(publishedAt), { addSuffix: true })
     : "";
 
+  const isWTTJ = source === "Welcome to the Jungle";
+
   return (
     <a
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block rounded-xl border border-zinc-800 bg-zinc-900 p-4 transition-all hover:border-green-600 hover:bg-zinc-800/50"
+      className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
     >
-      <div className="mb-2 flex items-center gap-2">
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-            source === "Welcome to the Jungle"
-              ? "bg-yellow-600/20 text-yellow-400"
-              : "bg-green-600/20 text-green-400"
-          }`}
-        >
-          {source}
-        </span>
-        {timeAgo && <span className="text-xs text-zinc-500">{timeAgo}</span>}
+      <div className={`h-1 w-full ${isWTTJ ? "bg-amber-400" : "bg-emerald-500"}`} />
+      <div className="flex flex-1 flex-col p-4">
+        <div className="mb-2 flex items-center gap-2">
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+              isWTTJ
+                ? "bg-amber-50 text-amber-700"
+                : "bg-emerald-50 text-emerald-700"
+            }`}
+          >
+            {source}
+          </span>
+          {timeAgo && <span className="text-xs text-gray-400">{timeAgo}</span>}
+        </div>
+        <h3 className="mb-1 text-sm font-semibold text-gray-900 group-hover:text-indigo-600 leading-snug">
+          {title}
+        </h3>
+        <p className="text-xs text-gray-500">
+          {company} · {location}
+        </p>
+        {salary && (
+          <p className="mt-1 text-xs font-medium text-emerald-600">{salary}</p>
+        )}
       </div>
-      <h3 className="mb-1 text-sm font-semibold text-white group-hover:text-green-400">
-        {title}
-      </h3>
-      <p className="text-xs text-zinc-400">
-        {company} · {location}
-      </p>
-      {salary && (
-        <p className="mt-1 text-xs font-medium text-green-400">{salary}</p>
-      )}
     </a>
   );
 }

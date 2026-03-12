@@ -48,10 +48,21 @@ interface NewsData {
   }>;
 }
 
+const TABS = [
+  { key: "all", label: "All" },
+  { key: "news", label: "News" },
+  { key: "rss", label: "RSS" },
+  { key: "polymarket", label: "Markets" },
+  { key: "reddit", label: "Reddit" },
+  { key: "twitter", label: "X / Twitter" },
+] as const;
+
+type Tab = typeof TABS[number]["key"];
+
 export default function NewsPage() {
   const [data, setData] = useState<NewsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"all" | "rss" | "news" | "polymarket" | "twitter" | "reddit">("all");
+  const [tab, setTab] = useState<Tab>("all");
 
   useEffect(() => {
     fetch("/api/news")
@@ -64,7 +75,7 @@ export default function NewsPage() {
   if (loading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
       </div>
     );
   }
@@ -72,36 +83,36 @@ export default function NewsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">AI News Feed</h1>
-        <p className="text-sm text-zinc-400">
+        <h1 className="text-2xl font-bold text-gray-900">AI News Feed</h1>
+        <p className="text-sm text-gray-500">
           Real-time updates from blogs, news, and prediction markets
         </p>
       </div>
 
       {/* Tab filters */}
-      <div className="mb-6 flex gap-2">
-        {(["all", "rss", "news", "polymarket", "twitter", "reddit"] as const).map((t) => (
+      <div className="mb-6 flex flex-wrap gap-1.5 border-b border-gray-200 pb-4">
+        {TABS.map(({ key, label }) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
-              tab === t
-                ? "bg-blue-600 text-white"
-                : "bg-zinc-800 text-zinc-400 hover:text-white"
+            key={key}
+            onClick={() => setTab(key)}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              tab === key
+                ? "bg-gray-900 text-white"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
             }`}
           >
-            {t === "rss" ? "RSS Feeds" : t === "polymarket" ? "Markets" : t === "twitter" ? "X / Twitter" : t === "reddit" ? "Reddit" : t}
+            {label}
           </button>
         ))}
       </div>
 
-      {/* Polymarket section */}
+      {/* Polymarket */}
       {(tab === "all" || tab === "polymarket") &&
         data?.polymarket &&
         data.polymarket.length > 0 && (
-          <div className="mb-8">
-            <h2 className="mb-3 text-lg font-semibold text-purple-400">
-              AI Prediction Markets
+          <div className="mb-10">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
+              Prediction Markets
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {data.polymarket.map((event) => (
@@ -115,8 +126,8 @@ export default function NewsPage() {
       {(tab === "all" || tab === "news") &&
         data?.news &&
         data.news.length > 0 && (
-          <div className="mb-8">
-            <h2 className="mb-3 text-lg font-semibold text-blue-400">
+          <div className="mb-10">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
               Latest News
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -139,8 +150,8 @@ export default function NewsPage() {
       {(tab === "all" || tab === "rss") &&
         data?.rss &&
         data.rss.length > 0 && (
-          <div className="mb-8">
-            <h2 className="mb-3 text-lg font-semibold text-cyan-400">
+          <div className="mb-10">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
               Blog & RSS Feeds
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -162,8 +173,8 @@ export default function NewsPage() {
       {(tab === "all" || tab === "reddit") &&
         data?.reddit &&
         data.reddit.length > 0 && (
-          <div className="mb-8">
-            <h2 className="mb-3 text-lg font-semibold text-orange-400">
+          <div className="mb-10">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
               Reddit
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -171,7 +182,7 @@ export default function NewsPage() {
                 <NewsCard
                   key={post.id}
                   title={post.title}
-                  snippet={post.snippet || `↑ ${post.score} · ${post.subreddit}`}
+                  snippet={post.snippet || `${post.score} pts · ${post.subreddit}`}
                   source={`${post.subreddit} · ${post.author}`}
                   url={post.permalink}
                   date={post.publishedAt}
@@ -185,8 +196,8 @@ export default function NewsPage() {
       {(tab === "all" || tab === "twitter") &&
         data?.tweets &&
         data.tweets.length > 0 && (
-          <div className="mb-8">
-            <h2 className="mb-3 text-lg font-semibold text-sky-400">
+          <div className="mb-10">
+            <h2 className="mb-4 text-base font-semibold text-gray-900">
               X / Twitter
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
