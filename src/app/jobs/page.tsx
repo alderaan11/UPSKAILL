@@ -75,18 +75,18 @@ export default function JobsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">AI Job Board</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">AI Job Board</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Offres AI/ML en France + entreprises qui recrutent
         </p>
       </div>
 
       {/* Tabs */}
-      <div className="mb-6 flex gap-1 rounded-xl border border-gray-200 bg-gray-100 p-1 w-fit">
+      <div className="mb-6 flex gap-1 rounded-xl border border-gray-200 bg-gray-100 p-1 w-fit dark:border-gray-700 dark:bg-gray-800">
         <button
           onClick={() => setTab("offres")}
           className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
-            tab === "offres" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+            tab === "offres" ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white" : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           }`}
         >
           Offres d&apos;emploi
@@ -94,7 +94,7 @@ export default function JobsPage() {
         <button
           onClick={() => setTab("entreprises")}
           className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors ${
-            tab === "entreprises" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+            tab === "entreprises" ? "bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white" : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           }`}
         >
           Entreprises qui recrutent
@@ -117,8 +117,8 @@ export default function JobsPage() {
                     onClick={() => setSourceFilter(s)}
                     className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
                       sourceFilter === s
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                        ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+                        : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
                     }`}
                   >
                     {s}
@@ -127,8 +127,8 @@ export default function JobsPage() {
               </div>
 
               {filteredJobs.length === 0 ? (
-                <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-                  <p className="text-gray-500">
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800/50">
+                  <p className="text-gray-500 dark:text-gray-400">
                     Aucune offre trouvée. Ajoutez vos clés API dans .env.local.
                   </p>
                 </div>
@@ -148,7 +148,7 @@ export default function JobsPage() {
       {tab === "entreprises" && (
         <>
           <div className="mb-4">
-            <p className="mb-3 text-sm text-gray-500">
+            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
               Entreprises ayant le plus de chances de recruter dans les 6 prochains mois
               pour des profils data / IA — données France Travail.
             </p>
@@ -159,8 +159,8 @@ export default function JobsPage() {
                   onClick={() => setSelectedCity(city)}
                   className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
                     selectedCity.label === city.label
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                      ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+                      : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
                   }`}
                 >
                   {city.label}
@@ -174,11 +174,11 @@ export default function JobsPage() {
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
             </div>
           ) : lbbFetched && companies.length === 0 ? (
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-              <p className="text-gray-500">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800/50">
+              <p className="text-gray-500 dark:text-gray-400">
                 Aucune entreprise trouvée. Vérifiez que{" "}
-                <code className="text-gray-700">FRANCE_TRAVAIL_CLIENT_ID</code> et{" "}
-                <code className="text-gray-700">FRANCE_TRAVAIL_CLIENT_SECRET</code> sont
+                <code className="text-gray-700 dark:text-gray-300">FRANCE_TRAVAIL_CLIENT_ID</code> et{" "}
+                <code className="text-gray-700 dark:text-gray-300">FRANCE_TRAVAIL_CLIENT_SECRET</code> sont
                 configurés.
               </p>
             </div>

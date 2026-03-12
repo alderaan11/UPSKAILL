@@ -109,8 +109,8 @@ export default function ModelsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">AI Model Updates</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">AI Model Updates</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Latest releases, benchmarks, and research papers
         </p>
       </div>
@@ -122,7 +122,7 @@ export default function ModelsPage() {
         </div>
       ) : modelItems.length > 0 && (
         <div className="mb-10">
-          <h2 className="mb-4 text-base font-semibold text-gray-900">Model News</h2>
+          <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">Model News</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {modelItems.map((item) => (
               <NewsCard
@@ -140,15 +140,15 @@ export default function ModelsPage() {
 
       {/* PyPI Package Releases */}
       <div className="mb-10">
-        <h2 className="mb-1 text-base font-semibold text-gray-900">Library Releases</h2>
-        <p className="mb-4 text-xs text-gray-400">vLLM · Unsloth · Transformers</p>
+        <h2 className="mb-1 text-base font-semibold text-gray-900 dark:text-white">Library Releases</h2>
+        <p className="mb-4 text-xs text-gray-400 dark:text-gray-500">vLLM · Unsloth · Transformers</p>
         {loadingReleases ? (
           <div className="flex justify-center py-6">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
           </div>
         ) : releases.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 text-center">
-            <p className="text-gray-500">No releases found.</p>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-6 text-center dark:border-gray-700 dark:bg-gray-800/50">
+            <p className="text-gray-500 dark:text-gray-400">No releases found.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -158,7 +158,7 @@ export default function ModelsPage() {
                 href={r.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
+                className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600"
               >
                 <div className={`h-1 w-full ${r.package === "vLLM" ? "bg-cyan-500" : r.package === "Unsloth" ? "bg-orange-500" : "bg-yellow-500"}`} />
                 <div className="flex flex-1 flex-col p-4">
@@ -166,12 +166,12 @@ export default function ModelsPage() {
                     <span className={`rounded border px-2 py-0.5 text-xs font-semibold ${PACKAGE_COLORS[r.package] ?? "bg-gray-100 text-gray-700 border-gray-200"}`}>
                       {r.package}
                     </span>
-                    <span className="font-mono text-sm font-medium text-gray-900">{r.version}</span>
+                    <span className="font-mono text-sm font-medium text-gray-900 dark:text-white">{r.version}</span>
                   </div>
                   {r.notes && (
-                    <p className="mb-3 line-clamp-3 flex-1 text-xs text-gray-500">{r.notes}</p>
+                    <p className="mb-3 line-clamp-3 flex-1 text-xs text-gray-500 dark:text-gray-400">{r.notes}</p>
                   )}
-                  <div className="mt-auto text-xs text-gray-400">
+                  <div className="mt-auto text-xs text-gray-400 dark:text-gray-500">
                     {r.pubDate ? new Date(r.pubDate).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
                   </div>
                 </div>
@@ -183,8 +183,8 @@ export default function ModelsPage() {
 
       {/* arXiv Research Papers */}
       <div>
-        <h2 className="mb-1 text-base font-semibold text-gray-900">Research Papers</h2>
-        <p className="mb-4 text-xs text-gray-400">via arXiv</p>
+        <h2 className="mb-1 text-base font-semibold text-gray-900 dark:text-white">Research Papers</h2>
+        <p className="mb-4 text-xs text-gray-400 dark:text-gray-500">via arXiv</p>
 
         {/* Topic filter */}
         <div className="mb-4 flex flex-wrap gap-1.5">
@@ -192,8 +192,8 @@ export default function ModelsPage() {
             onClick={() => setActiveTopic("all")}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               activeTopic === "all"
-                ? "bg-gray-900 text-white"
-                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
             }`}
           >
             All
@@ -208,7 +208,7 @@ export default function ModelsPage() {
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
                   isActive
                     ? BADGE_CLASSES[color]
-                    : "border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-900"
+                    : "border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-white"
                 }`}
               >
                 {topic}
@@ -222,8 +222,8 @@ export default function ModelsPage() {
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
           </div>
         ) : filteredPapers.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-            <p className="text-gray-500">No papers found for this topic.</p>
+          <div className="rounded-xl border border-gray-200 bg-gray-50 p-8 text-center dark:border-gray-700 dark:bg-gray-800/50">
+            <p className="text-gray-500 dark:text-gray-400">No papers found for this topic.</p>
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -235,7 +235,7 @@ export default function ModelsPage() {
                   href={paper.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md"
+                  className="group flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600"
                 >
                   <div className={`h-1 w-full ${color === "yellow" ? "bg-yellow-500" : color === "red" ? "bg-red-500" : color === "blue" ? "bg-blue-500" : color === "purple" ? "bg-purple-500" : "bg-green-500"}`} />
                   <div className="flex flex-1 flex-col p-4">
@@ -244,13 +244,13 @@ export default function ModelsPage() {
                         {paper.topic}
                       </span>
                     </div>
-                    <p className="mb-2 line-clamp-3 text-sm font-semibold leading-snug text-gray-900 group-hover:text-indigo-600">
+                    <p className="mb-2 line-clamp-3 text-sm font-semibold leading-snug text-gray-900 group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400">
                       {paper.title}
                     </p>
-                    <p className="mb-3 line-clamp-3 flex-1 text-xs text-gray-500">
+                    <p className="mb-3 line-clamp-3 flex-1 text-xs text-gray-500 dark:text-gray-400">
                       {paper.snippet}
                     </p>
-                    <div className="mt-auto flex items-center justify-between text-xs text-gray-400">
+                    <div className="mt-auto flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
                       <span>arXiv</span>
                       <span>
                         {paper.pubDate

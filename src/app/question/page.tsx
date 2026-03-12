@@ -132,15 +132,15 @@ export default function QuestionPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Question of the Day</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Question of the Day</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Pick a topic and get a technical interview question
         </p>
       </div>
 
       {/* Topic picker */}
       <div className="mb-6">
-        <p className="mb-3 text-sm font-medium text-gray-700">Choose a topic</p>
+        <p className="mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">Choose a topic</p>
         <div className="flex flex-wrap gap-2">
           {topics.map((t) => {
             const active = topic === t;
@@ -152,7 +152,7 @@ export default function QuestionPage() {
                   className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
                     active
                       ? activeClass
-                      : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900 shadow-sm"
+                      : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:text-white"
                   } ${isCustom(t) ? "pr-8" : ""}`}
                 >
                   {t}
@@ -160,7 +160,7 @@ export default function QuestionPage() {
                 {isCustom(t) && (
                   <button
                     onClick={() => removeTopic(t)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-700 leading-none"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-700 leading-none dark:text-gray-500 dark:hover:text-gray-200"
                     title="Remove topic"
                   >
                     ×
@@ -174,7 +174,7 @@ export default function QuestionPage() {
 
       {/* Add custom topic */}
       <div className="mb-6">
-        <p className="mb-2 text-sm font-medium text-gray-700">Add a topic</p>
+        <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Add a topic</p>
         <form
           onSubmit={(e) => { e.preventDefault(); addTopic(); }}
           className="flex gap-2"
@@ -184,12 +184,12 @@ export default function QuestionPage() {
             value={newTopic}
             onChange={(e) => setNewTopic(e.target.value)}
             placeholder="e.g. Deep Learning, SQL, Docker…"
-            className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm outline-none focus:border-gray-400"
+            className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm outline-none focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:border-gray-600"
           />
           <button
             type="submit"
             disabled={!newTopic.trim()}
-            className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-900 disabled:opacity-40"
+            className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-900 disabled:opacity-40 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Add
           </button>
@@ -209,16 +209,16 @@ export default function QuestionPage() {
 
       {/* Error */}
       {error && (
-        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
           {error}
         </div>
       )}
 
       {/* Question */}
       {question && (
-        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400">Question</p>
-          <p className="text-base leading-relaxed text-gray-900">{question}</p>
+        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-800/50">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Question</p>
+          <p className="text-base leading-relaxed text-gray-900 dark:text-white">{question}</p>
         </div>
       )}
 
@@ -230,7 +230,7 @@ export default function QuestionPage() {
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Type your answer here…"
             rows={5}
-            className="w-full rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-900 placeholder-gray-400 shadow-sm outline-none focus:border-gray-400"
+            className="w-full rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-900 placeholder-gray-400 shadow-sm outline-none focus:border-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:border-gray-600"
           />
           <button
             onClick={submitAnswer}
@@ -244,9 +244,9 @@ export default function QuestionPage() {
 
       {/* Feedback */}
       {(feedback || (streaming && phase === "feedback")) && (
-        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400">Feedback</p>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+        <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-800/50">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Feedback</p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700 dark:text-gray-300">
             {feedback}
             {streaming && <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-gray-400" />}
           </p>
@@ -258,13 +258,13 @@ export default function QuestionPage() {
         <div className="flex gap-2">
           <button
             onClick={generateQuestion}
-            className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:text-gray-900"
+            className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:text-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-white"
           >
             New question (same topic)
           </button>
           <button
             onClick={reset}
-            className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:text-gray-900"
+            className="rounded-lg border border-gray-200 px-4 py-2 text-sm text-gray-600 transition-colors hover:border-gray-300 hover:text-gray-900 dark:border-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-white"
           >
             Change topic
           </button>

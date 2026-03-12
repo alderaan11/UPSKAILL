@@ -83,22 +83,22 @@ export default function NewsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">AI News Feed</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">AI News Feed</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Real-time updates from blogs, news, and prediction markets
         </p>
       </div>
 
       {/* Tab filters */}
-      <div className="mb-6 flex flex-wrap gap-1.5 border-b border-gray-200 pb-4">
+      <div className="mb-6 flex flex-wrap gap-1.5 border-b border-gray-200 pb-4 dark:border-gray-700">
         {TABS.map(({ key, label }) => (
           <button
             key={key}
             onClick={() => setTab(key)}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
               tab === key
-                ? "bg-gray-900 text-white"
-                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+                ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+                : "text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
             }`}
           >
             {label}
@@ -111,7 +111,7 @@ export default function NewsPage() {
         data?.polymarket &&
         data.polymarket.length > 0 && (
           <div className="mb-10">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
+            <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
               Prediction Markets
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -127,7 +127,7 @@ export default function NewsPage() {
         data?.news &&
         data.news.length > 0 && (
           <div className="mb-10">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
+            <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
               Latest News
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -151,7 +151,7 @@ export default function NewsPage() {
         data?.rss &&
         data.rss.length > 0 && (
           <div className="mb-10">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
+            <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
               Blog & RSS Feeds
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -174,7 +174,7 @@ export default function NewsPage() {
         data?.reddit &&
         data.reddit.length > 0 && (
           <div className="mb-10">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
+            <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
               Reddit
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -197,7 +197,7 @@ export default function NewsPage() {
         data?.tweets &&
         data.tweets.length > 0 && (
           <div className="mb-10">
-            <h2 className="mb-4 text-base font-semibold text-gray-900">
+            <h2 className="mb-4 text-base font-semibold text-gray-900 dark:text-white">
               X / Twitter
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

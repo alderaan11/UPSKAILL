@@ -92,18 +92,18 @@ export default function ChallengePage() {
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col">
       <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900">Daily AI Challenge</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Daily AI Challenge</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
           Get a problem. Propose your AI solution. Get roasted. Improve.
         </p>
       </div>
 
       {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 p-4">
+      <div className="flex-1 overflow-y-auto rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
         {messages.length === 0 && (
           <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-            <p className="text-gray-500 max-w-sm">
-              Type <strong className="text-gray-900">&quot;new challenge&quot;</strong> to get your daily AI problem.
+            <p className="text-gray-500 max-w-sm dark:text-gray-400">
+              Type <strong className="text-gray-900 dark:text-white">&quot;new challenge&quot;</strong> to get your daily AI problem.
               <br />
               Then propose your solution and the coach will aggressively critique it.
             </p>
@@ -124,8 +124,8 @@ export default function ChallengePage() {
             <div
               className={`inline-block max-w-[80%] rounded-xl px-4 py-2.5 text-sm ${
                 msg.role === "user"
-                  ? "bg-gray-900 text-white"
-                  : "bg-white border border-gray-200 text-gray-800 shadow-sm"
+                  ? "bg-gray-900 text-white dark:bg-indigo-600"
+                  : "bg-white border border-gray-200 text-gray-800 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
               }`}
             >
               <pre className="whitespace-pre-wrap font-sans">
@@ -153,7 +153,7 @@ export default function ChallengePage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Describe your AI solution..."
-          className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-400 focus:outline-none shadow-sm"
+          className="flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-400 focus:outline-none shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 dark:focus:border-gray-600"
           disabled={streaming}
         />
         <button
