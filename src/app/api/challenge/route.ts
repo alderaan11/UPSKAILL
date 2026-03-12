@@ -1,6 +1,8 @@
 import { getOpenRouter } from "@/lib/openrouter";
 import { NextRequest } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 const SYSTEM_PROMPT = `You are an aggressive AI problem-solving coach. Your job is to:
 
 1. When the user says "new challenge" or starts a conversation, present a real-world business or technical problem that should be solved using AI/ML. Be specific — give context, constraints, data available, and expected outcome.
