@@ -27,35 +27,48 @@ export default function QuestionPage() {
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [streaming, setStreaming] = useState(false);
+  const [error, setError] = useState("");
 
   async function streamResponse(body: object, onChunk: (text: string) => void) {
     setStreaming(true);
-    const res = await fetch("/api/question", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    setError("");
+    try {
+      const res = await fetch("/api/question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    const reader = res.body!.getReader();
-    const decoder = new TextDecoder();
-    let buffer = "";
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || `Erreur ${res.status}`);
+        setStreaming(false);
+        return;
+      }
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split("\n");
-      buffer = lines.pop() || "";
-      for (const line of lines) {
-        if (line.startsWith("data: ")) {
-          const payload = line.slice(6);
-          if (payload === "[DONE]") break;
-          try {
-            const { text } = JSON.parse(payload);
-            if (text) onChunk(text);
-          } catch {}
+      const reader = res.body!.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const payload = line.slice(6);
+            if (payload === "[DONE]") break;
+            try {
+              const { text } = JSON.parse(payload);
+              if (text) onChunk(text);
+            } catch {}
+          }
         }
       }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Erreur réseau");
     }
     setStreaming(false);
   }
@@ -86,6 +99,7 @@ export default function QuestionPage() {
     setQuestion("");
     setAnswer("");
     setFeedback("");
+    setError("");
   }
 
   return (
@@ -107,7 +121,7 @@ export default function QuestionPage() {
             return (
               <button
                 key={t}
-                onClick={() => { setTopic(t); setPhase("pick"); setQuestion(""); setAnswer(""); setFeedback(""); }}
+                onClick={() => { setTopic(t); setPhase("pick"); setQuestion(""); setAnswer(""); setFeedback(""); setError(""); }}
                 className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
                   active
                     ? `${color} text-white border-transparent`
@@ -130,6 +144,13 @@ export default function QuestionPage() {
         >
           {streaming && phase === "question" ? "Generating…" : "Get Question"}
         </button>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-800 bg-red-950/40 p-4 text-sm text-red-400">
+          {error}
+        </div>
       )}
 
       {/* Question */}

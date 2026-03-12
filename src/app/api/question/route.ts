@@ -53,7 +53,7 @@ Be direct and educational. Max 150 words.`;
   let stream;
   try {
     stream = await getOpenRouter().chat.completions.create({
-      model: "meta-llama/llama-3.1-8b-instruct:free",
+      model: "mistralai/mistral-7b-instruct:free",
       stream: true,
       max_tokens: 300,
       messages: [{ role: "user", content: prompt }],

@@ -47,7 +47,7 @@ def scrape_wttj() -> list[dict]:
                 "Origin": "https://www.welcometothejungle.com",
             },
             json={
-                "query": "machine learning intelligence artificielle data scientist",
+                "query": "machine learning data ia computer vision intelligence artificielle",
                 "hitsPerPage": 20,
                 "filters": "language:fr",
             },

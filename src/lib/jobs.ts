@@ -70,7 +70,7 @@ export async function fetchFranceTravailJobs(): Promise<JobListing[]> {
   const token = await getFranceTravailToken();
   if (!token) return [];
 
-  const KEYWORDS = ["machine+learning", "data", "ia"];
+  const KEYWORDS = ["machine+learning", "data", "ia", "computer+vision", "intelligence+artificielle"];
   const BASE = "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search";
 
   const results = await Promise.allSettled(
