@@ -1,3 +1,5 @@
+import Parser from "rss-parser";
+
 export interface RedditPost {
   id: string;
   title: string;
@@ -10,35 +12,39 @@ export interface RedditPost {
   publishedAt: string;
 }
 
+const parser = new Parser({
+  customFields: {
+    item: [["media:thumbnail", "mediaThumbnail"]],
+  },
+});
+
 const SUBREDDITS = ["MachineLearning", "artificial", "agenticai"];
 
 async function fetchSubreddit(subreddit: string): Promise<RedditPost[]> {
-  const res = await fetch(
-    `https://www.reddit.com/r/${subreddit}/new.json?limit=10`,
-    {
-      headers: {
-        "User-Agent": "ai-pulse/1.0 (news aggregator)",
-        Accept: "application/json",
-      },
-      cache: "no-store",
-    }
-  );
-  if (!res.ok) return [];
+  try {
+    const feed = await parser.parseURL(
+      `https://www.reddit.com/r/${subreddit}/new.rss?limit=10`
+    );
+    return (feed.items || []).map((item) => {
+      // id is the last segment of the post URL: .../comments/<id>/...
+      const idMatch = (item.link || "").match(/comments\/([a-z0-9]+)\//i);
+      const id = idMatch ? idMatch[1] : item.guid || item.link || "";
 
-  const json = await res.json();
-  const children = json?.data?.children ?? [];
-
-  return children.map(({ data }: { data: Record<string, unknown> }) => ({
-    id: String(data.id),
-    title: String(data.title),
-    snippet: String(data.selftext || "").slice(0, 280).trim(),
-    url: String(data.url),
-    permalink: `https://www.reddit.com${data.permalink}`,
-    author: `u/${data.author}`,
-    subreddit: `r/${data.subreddit}`,
-    score: Number(data.score),
-    publishedAt: new Date(Number(data.created_utc) * 1000).toISOString(),
-  }));
+      return {
+        id,
+        title: (item.title || "").replace(/\s+/g, " ").trim(),
+        snippet: (item.contentSnippet || item.content || "").slice(0, 280).trim(),
+        url: item.link || "",
+        permalink: item.link || "",
+        author: `u/${item.creator || item.author || "unknown"}`,
+        subreddit: `r/${subreddit}`,
+        score: 0,
+        publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
+      };
+    });
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchRedditPosts(): Promise<RedditPost[]> {
