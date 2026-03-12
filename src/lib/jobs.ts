@@ -57,10 +57,10 @@ export async function fetchFranceTravailJobs(): Promise<JobListing[]> {
   try {
     const res = await fetch(
       "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search" +
-        "?motsCles=machine+learning+data+science+intelligence+artificielle&sort=1&range=0-19",
+        "?motsCles=machine+learning+data+science+intelligence+artificielle&sort=1&range=0-9",
       {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
-        next: { revalidate: 3600 },
+        cache: "no-store",
       }
     );
     if (!res.ok) return [];
@@ -93,8 +93,8 @@ export async function fetchAdzunaJobs(): Promise<JobListing[]> {
 
   try {
     const res = await fetch(
-      `https://api.adzuna.com/v1/api/jobs/fr/search/1?app_id=${appId}&app_key=${appKey}&results_per_page=20&what=artificial+intelligence+machine+learning&sort_by=date`,
-      { next: { revalidate: 600 } }
+      `https://api.adzuna.com/v1/api/jobs/fr/search/1?app_id=${appId}&app_key=${appKey}&results_per_page=10&what=artificial+intelligence+machine+learning&sort_by=date`,
+      { cache: "no-store" }
     );
     if (!res.ok) return [];
 

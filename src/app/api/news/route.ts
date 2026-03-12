@@ -3,6 +3,8 @@ import { fetchAllFeeds } from "@/lib/rss";
 import { fetchAINews } from "@/lib/newsapi";
 import { fetchAIPolymarketEvents } from "@/lib/polymarket";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const [rssItems, newsArticles, polymarketEvents] = await Promise.allSettled([
     fetchAllFeeds(),

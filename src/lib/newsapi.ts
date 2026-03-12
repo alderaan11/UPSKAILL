@@ -12,10 +12,10 @@ export async function fetchAINews(): Promise<NewsArticle[]> {
   if (!apiKey) return [];
 
   const res = await fetch(
-    `https://newsapi.org/v2/everything?q=artificial+intelligence+OR+LLM+OR+GPT+OR+Claude&language=en&sortBy=publishedAt&pageSize=20`,
+    `https://newsapi.org/v2/everything?q=artificial+intelligence+OR+LLM+OR+GPT+OR+Claude+OR+machine+learning&language=en&sortBy=publishedAt&pageSize=10`,
     {
       headers: { "X-Api-Key": apiKey },
-      next: { revalidate: 300 }, // cache 5 min
+      cache: "no-store",
     }
   );
 

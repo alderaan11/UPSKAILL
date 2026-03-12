@@ -16,7 +16,10 @@ jobs:
 
       - uses: astral-sh/setup-uv@v5
 
-      - name: Install Playwright browser
+      - name: Install Chromium + ChromeDriver (for Selenium)
+        run: sudo apt-get install -y chromium-browser chromium-chromedriver
+
+      - name: Install Playwright browser (for Indeed)
         run: uv run --with playwright python3 -m playwright install chromium --with-deps
 
       - name: Run scraper
