@@ -1,4 +1,4 @@
-import { openrouter } from "@/lib/openrouter";
+import { getOpenRouter } from "@/lib/openrouter";
 import { NextRequest } from "next/server";
 
 const SYSTEM_PROMPT = `You are an aggressive AI problem-solving coach. Your job is to:
@@ -21,7 +21,7 @@ You are NOT mean — you are demanding. Like a tough coach who wants them to be 
 export async function POST(req: NextRequest) {
   const { messages } = await req.json();
 
-  const stream = await openrouter.chat.completions.create({
+  const stream = await getOpenRouter().chat.completions.create({
     model: "anthropic/claude-sonnet-4",
     stream: true,
     messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
