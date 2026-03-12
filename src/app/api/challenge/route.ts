@@ -21,13 +21,30 @@ const SYSTEM_PROMPT = `You are an aggressive AI problem-solving coach. Your job 
 You are NOT mean — you are demanding. Like a tough coach who wants them to be the best. Use short, punchy sentences.`;
 
 export async function POST(req: NextRequest) {
+  if (!process.env.OPENROUTER_API_KEY) {
+    return new Response(JSON.stringify({ error: "OPENROUTER_API_KEY is not set" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const { messages } = await req.json();
 
-  const stream = await getOpenRouter().chat.completions.create({
-    model: "anthropic/claude-sonnet-4",
-    stream: true,
-    messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
-  });
+  let stream;
+  try {
+    stream = await getOpenRouter().chat.completions.create({
+      model: "anthropic/claude-sonnet-4-5",
+      stream: true,
+      max_tokens: 1024,
+      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return new Response(JSON.stringify({ error: msg }), {
+      status: 502,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
   // Stream the response
   const encoder = new TextEncoder();

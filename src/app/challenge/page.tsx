@@ -37,7 +37,10 @@ export default function ChallengePage() {
         body: JSON.stringify({ messages: newMessages }),
       });
 
-      if (!res.ok) throw new Error("Failed to fetch");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `API error ${res.status}`);
+      }
 
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No reader");
@@ -76,13 +79,13 @@ export default function ChallengePage() {
         }
       }
     } catch (error) {
+      const msg = error instanceof Error ? error.message : "Unknown error";
       console.error(error);
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content:
-            "Error connecting to AI. Make sure your OPENROUTER_API_KEY is set in .env.local",
+          content: `Error: ${msg}`,
         },
       ]);
     } finally {
