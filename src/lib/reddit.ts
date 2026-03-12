@@ -36,7 +36,7 @@ async function fetchSubreddit(subreddit: string): Promise<RedditPost[]> {
         snippet: (item.contentSnippet || item.content || "").slice(0, 280).trim(),
         url: item.link || "",
         permalink: item.link || "",
-        author: `u/${item.creator || item.author || "unknown"}`,
+        author: `u/${item.creator || (item as unknown as Record<string, string>).author || "unknown"}`,
         subreddit: `r/${subreddit}`,
         score: 0,
         publishedAt: item.isoDate || item.pubDate || new Date().toISOString(),
