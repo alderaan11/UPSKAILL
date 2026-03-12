@@ -53,7 +53,7 @@ Be direct and educational. Max 150 words.`;
   let stream;
   try {
     stream = await getOpenRouter().chat.completions.create({
-      model: "mistralai/mistral-7b-instruct:free",
+      model: "anthropic/claude-sonnet-4-5",
       stream: true,
       max_tokens: 300,
       messages: [{ role: "user", content: prompt }],
