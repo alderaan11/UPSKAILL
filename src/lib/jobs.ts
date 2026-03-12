@@ -50,39 +50,51 @@ async function getFranceTravailToken(): Promise<string | null> {
   }
 }
 
+function mapFTResult(j: Record<string, unknown>): JobListing {
+  const lieu = (j.lieuTravail as Record<string, string>) ?? {};
+  const entreprise = (j.entreprise as Record<string, string>) ?? {};
+  const origine = (j.origineOffre as Record<string, string>) ?? {};
+  return {
+    title: j.intitule as string,
+    company: entreprise.nom || "Unknown",
+    location: lieu.libelle || "France",
+    url:
+      origine.urlOrigine ||
+      `https://candidat.francetravail.fr/offres/emploi/detail/${j.id}`,
+    source: "France Travail",
+    publishedAt: j.dateCreation as string,
+  };
+}
+
 export async function fetchFranceTravailJobs(): Promise<JobListing[]> {
   const token = await getFranceTravailToken();
   if (!token) return [];
 
-  try {
-    const res = await fetch(
-      "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search" +
-        "?motsCles=machine+learning+data+science+intelligence+artificielle&sort=1&range=0-9",
-      {
+  const KEYWORDS = ["machine+learning", "data", "ia"];
+  const BASE = "https://api.francetravail.io/partenaire/offresdemploi/v2/offres/search";
+
+  const results = await Promise.allSettled(
+    KEYWORDS.map((kw) =>
+      fetch(`${BASE}?motsCles=${kw}&sort=1&range=0-9`, {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
         cache: "no-store",
+      }).then((r) => (r.ok ? r.json() : { resultats: [] }))
+    )
+  );
+
+  const seen = new Set<string>();
+  const jobs: JobListing[] = [];
+  for (const result of results) {
+    if (result.status !== "fulfilled") continue;
+    for (const j of result.value.resultats || []) {
+      const mapped = mapFTResult(j);
+      if (!seen.has(mapped.url)) {
+        seen.add(mapped.url);
+        jobs.push(mapped);
       }
-    );
-    if (!res.ok) return [];
-    const data = await res.json();
-    return (data.resultats || []).map((j: Record<string, unknown>) => {
-      const lieu = (j.lieuTravail as Record<string, string>) ?? {};
-      const entreprise = (j.entreprise as Record<string, string>) ?? {};
-      const origine = (j.origineOffre as Record<string, string>) ?? {};
-      return {
-        title: j.intitule as string,
-        company: entreprise.nom || "Unknown",
-        location: lieu.libelle || "France",
-        url:
-          origine.urlOrigine ||
-          `https://candidat.francetravail.fr/offres/emploi/detail/${j.id}`,
-        source: "France Travail",
-        publishedAt: j.dateCreation as string,
-      };
-    });
-  } catch {
-    return [];
+    }
   }
+  return jobs;
 }
 
 // Adzuna API — free tier available
