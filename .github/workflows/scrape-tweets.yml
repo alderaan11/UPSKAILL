@@ -1,0 +1,38 @@
+name: Scrape Tweets
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # every 2 hours
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Run tweet scraper
+        env:
+          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }}
+          TWITTER_EMAIL: ${{ secrets.TWITTER_EMAIL }}
+          TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
+        run: uv run scripts/scrape_tweets.py
+
+      - name: Commit and trigger Vercel deploy if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/scraped-tweets.json
+          if git diff --staged --quiet; then
+            echo "No new tweets, skipping deploy"
+          else
+            git commit -m "chore: update scraped tweets [skip ci]"
+            git push
+            curl -s -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
+            echo "Vercel deploy triggered"
+          fi

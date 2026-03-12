@@ -27,12 +27,31 @@ interface NewsData {
     outcomePrices: string[];
     volume: number;
   }>;
+  tweets: Array<{
+    id: string;
+    text: string;
+    author: string;
+    handle: string;
+    url: string;
+    publishedAt: string;
+  }>;
+  reddit: Array<{
+    id: string;
+    title: string;
+    snippet: string;
+    url: string;
+    permalink: string;
+    author: string;
+    subreddit: string;
+    score: number;
+    publishedAt: string;
+  }>;
 }
 
 export default function NewsPage() {
   const [data, setData] = useState<NewsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"all" | "rss" | "news" | "polymarket">("all");
+  const [tab, setTab] = useState<"all" | "rss" | "news" | "polymarket" | "twitter" | "reddit">("all");
 
   useEffect(() => {
     fetch("/api/news")
@@ -61,7 +80,7 @@ export default function NewsPage() {
 
       {/* Tab filters */}
       <div className="mb-6 flex gap-2">
-        {(["all", "rss", "news", "polymarket"] as const).map((t) => (
+        {(["all", "rss", "news", "polymarket", "twitter", "reddit"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -71,7 +90,7 @@ export default function NewsPage() {
                 : "bg-zinc-800 text-zinc-400 hover:text-white"
             }`}
           >
-            {t === "rss" ? "RSS Feeds" : t === "polymarket" ? "Markets" : t}
+            {t === "rss" ? "RSS Feeds" : t === "polymarket" ? "Markets" : t === "twitter" ? "X / Twitter" : t === "reddit" ? "Reddit" : t}
           </button>
         ))}
       </div>
@@ -120,7 +139,7 @@ export default function NewsPage() {
       {(tab === "all" || tab === "rss") &&
         data?.rss &&
         data.rss.length > 0 && (
-          <div>
+          <div className="mb-8">
             <h2 className="mb-3 text-lg font-semibold text-cyan-400">
               Blog & RSS Feeds
             </h2>
@@ -133,6 +152,52 @@ export default function NewsPage() {
                   source={item.source}
                   url={item.link}
                   date={item.pubDate}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+      {/* Reddit */}
+      {(tab === "all" || tab === "reddit") &&
+        data?.reddit &&
+        data.reddit.length > 0 && (
+          <div className="mb-8">
+            <h2 className="mb-3 text-lg font-semibold text-orange-400">
+              Reddit
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {data.reddit.map((post) => (
+                <NewsCard
+                  key={post.id}
+                  title={post.title}
+                  snippet={post.snippet || `↑ ${post.score} · ${post.subreddit}`}
+                  source={`${post.subreddit} · ${post.author}`}
+                  url={post.permalink}
+                  date={post.publishedAt}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+      {/* Tweets */}
+      {(tab === "all" || tab === "twitter") &&
+        data?.tweets &&
+        data.tweets.length > 0 && (
+          <div className="mb-8">
+            <h2 className="mb-3 text-lg font-semibold text-sky-400">
+              X / Twitter
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {data.tweets.map((tweet) => (
+                <NewsCard
+                  key={tweet.id}
+                  title={tweet.text.slice(0, 100) + (tweet.text.length > 100 ? "…" : "")}
+                  snippet={tweet.text}
+                  source={`${tweet.author} ${tweet.handle}`}
+                  url={tweet.url}
+                  date={tweet.publishedAt}
                 />
               ))}
             </div>
